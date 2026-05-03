@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Builder</title>
+
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"></head>
+<body class="bg-dark text-light">
+    
+    <header class="container py-4">
+        <h1>Resume Builder</h1>
+
+        <nav class="d-flex flex-wrap gap-2">
+            <button class="btn btn-primary" id="btnHome">Home</button>
+            <button class="btn btn-primary" id="btnJobs">Jobs</button>
+            <button class="btn btn-primary" id="btnSkills">Skills</button>
+            <button class="btn btn-primary" id="btnCertifications">Certifications</button>
+            <button class="btn btn-primary" id="btnAwards">Awards</button>
+            <button class="btn btn-primary" id="btnResume">Resume</button>
+        </nav>
+    </header>
+
+    <main id="app" class="container pb-5">
+
+        <section id="homeSection" class="card bg-secondary text-light p-4 mb-4">
+            <h2>Profile</h2>
+            <p>Enter the contact information that will appear at the top of your resume.</p>
+
+            <form id="profileForm">
+                <input type="text" id="txtFullName" placeholder="Full Name" required>
+                <input type="text" id="txtEmail" placeholder="Email" required>
+                <input type="text" id="txtPhone" placeholder="Phone" required>
+                <input type="text" id="txtLinkedIn" placeholder="LinkedIn" required>
+                <input type="text" id="txtGitHub" placeholder="GitHub">
+
+                <button type="submit">Save Profile</button>
+            </form>
+
+            <p id="profileMessage" class="text-success fw-bold"></p>
+            <hr>
+
+            <h3>Gemini API Key</h3>
+            <p>Enter your own Gemini API key for resume detail suggestions.</p>
+
+            <form id="apiKeyForm">
+                <input type="password" id="txtGeminiAPIKey" placeholder="Gemini API Key">
+                <button type="submit">Save API Key</button>
+            </form>
+
+            <p id="apiKeyMessage" class="text-success fw-bold"></p>
+        </section>
+
+        <section id="jobsSection" class="card bg-secondary text-light p-4 mb-4 d-none">
+            <h2>Jobs</h2>
+
+            <form id="jobForm">
+                <input type="text" id="txtJobTitle" placeholder="Job Title" required>
+                <input type="text" id="txtCompany" placeholder="Company" required>
+                <input type="text" id="txtStartDate" placeholder="Start Date" required>
+                <input type="text" id="txtEndDate" placeholder="End Date" required>
+                <input type="text" id="txtLocation" placeholder="Location" required>
+
+                <button type="submit">Add Job</button>
+            </form>
+
+            <p id="jobMessage" class="text-success fw-bold"></p>
+            <div id="jobsList"></div>
+        </section>
+
+        <section id="skillsSection" class="card bg-secondary text-light p-4 mb-4 d-none">
+            <h2>Skills</h2>
+
+            <form id="skillForm">
+                <input type="text" id="txtSkillName" placeholder="Skill Name" required>
+                <input type="text" id="txtSkillCategory" placeholder="Skill Category">
+
+                <button type="submit">Add Skill</button>
+            </form>
+
+            <p id="skillMessage" class="text-success fw-bold"></p>
+            <div id="skillsList"></div>
+        </section>
+
+        <section id="certificationsSection" class="card bg-secondary text-light p-4 mb-4 d-none">
+            <h2>Certifications</h2>
+
+            <form id="certificationForm">
+                <input type="text" id="txtCertificationName" placeholder="Certification Name" required>
+                <input type="text" id="txtOrganization" placeholder="Organization">
+                <input type="text" id="txtDateEarned" placeholder="Date Earned">
+
+                <button type="submit">Add Certification</button>
+            </form>
+
+            <p id="certificationMessage" class="text-success fw-bold"></p>
+            <div id="certificationsList"></div>
+        </section>
+
+        <section id="awardsSection" class="card bg-secondary text-light p-4 mb-4 d-none">
+            <h2>Awards</h2>
+
+            <form id="awardForm">
+                <input type="text" id="txtAwardName" placeholder="Award Name" required>
+                <input type="text" id="txtAwardOrganization" placeholder="Organization">
+                <input type="text" id="txtAwardDate" placeholder="Date">
+
+                <button type="submit">Add Award</button>
+            </form>
+
+            <p id="awardMessage" class="text-success fw-bold"></p>
+            <div id="awardsList"></div>
+        </section>
+
+        <section id="resumeSection" class="card bg-secondary text-light p-4 mb-4 d-none">
+            <h2>Resume Preview</h2>
+
+            <h3>Select What to Include</h3>
+            <div id="resumeOptions"></div>
+            
+            <h3>Preview</h3>
+            <button id="btnPrintResume">Print Resume</button>
+            <div id="resumePreview" class="bg-white text-dark p-4 rounded"></div>
+        </section>
+    </main>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>

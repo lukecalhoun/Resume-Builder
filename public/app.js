@@ -282,13 +282,18 @@ async function loadJobs(){
         })
 
         jobsList.innerHTML += `
-            <div>
-                <h3>${job.txtJobTitle}</h3>
+            <div class="card bg-dark text-light p-3 mb-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h3>${job.txtJobTitle}</h3>
+
+                    <button class="btn btn-sm btn-danger deleteJobButton" data-jobid="${job.jobID}" title="Delete job">
+                        Delete Job
+                    </button>
+                </div>
+
                 <p>${job.txtCompany}</p>
                 <p>${job.txtStartDate} - ${job.txtEndDate}</p>
                 <p>${job.txtLocation}</p>
-
-                <button class="btn btn-sm btn-danger deleteJobButton" data-jobid="${job.jobID}">Delete Job</button>
 
                 <ul>
                     ${detailsHTML}

@@ -3,21 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume Builder</title>
+    <title>ResuMate</title>
 
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"></head>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="icon" type="image/svg+xml" href="images/logo.svg">
+</head>
 <body class="bg-dark text-light">
     
-    <header class="container py-4">
-        <h1>Resume Builder</h1>
+    <header class="container py-4 text-center">
+        <h1 class="d-flex justify-content-center align-items-center gap-2 mb-3">
+            <img src="images/logo.svg" alt="ResuMate logo" width="40" height="40">
+            ResuMate
+        </h1>
 
-        <nav class="d-flex flex-wrap gap-2">
-            <button class="btn btn-primary" id="btnHome">Home</button>
-            <button class="btn btn-primary" id="btnJobs">Jobs</button>
-            <button class="btn btn-primary" id="btnSkills">Skills</button>
-            <button class="btn btn-primary" id="btnCertifications">Certifications</button>
-            <button class="btn btn-primary" id="btnAwards">Awards</button>
-            <button class="btn btn-primary" id="btnResume">Resume</button>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded">
+            <div class="container-fluid justify-content-center">
+                <div class="d-flex flex-wrap gap-2 justify-content-center">
+                    <button class="btn btn-primary" id="btnHome">Home</button>
+                    <button class="btn btn-primary" id="btnJobs">Jobs</button>
+                    <button class="btn btn-primary" id="btnSkills">Skills</button>
+                    <button class="btn btn-primary" id="btnCertifications">Certifications</button>
+                    <button class="btn btn-primary" id="btnAwards">Awards</button>
+                    <button class="btn btn-primary" id="btnResume">Resume</button>
+                    <button class="btn btn-outline-light" id="btnLibraries" data-bs-toggle="modal" data-bs-target="#librariesModal">
+                        Libraries
+                    </button>
+                </div>
+            </div>
         </nav>
     </header>
 
@@ -37,7 +49,7 @@
                 <button type="submit">Save Profile</button>
             </form>
 
-            <p id="profileMessage" class="text-success fw-bold"></p>
+            <p id="profileMessage" class="text-warning fw-bold"></p>
             <hr>
 
             <h3>Gemini API Key</h3>
@@ -48,7 +60,7 @@
                 <button type="submit">Save API Key</button>
             </form>
 
-            <p id="apiKeyMessage" class="text-success fw-bold"></p>
+            <p id="apiKeyMessage" class="text-warning fw-bold"></p>
         </section>
 
         <section id="jobsSection" class="card bg-secondary text-light p-4 mb-4 d-none">
@@ -64,7 +76,7 @@
                 <button type="submit">Add Job</button>
             </form>
 
-            <p id="jobMessage" class="text-success fw-bold"></p>
+            <p id="jobMessage" class="text-warning fw-bold"></p>
             <div id="jobsList"></div>
         </section>
 
@@ -78,7 +90,7 @@
                 <button type="submit">Add Skill</button>
             </form>
 
-            <p id="skillMessage" class="text-success fw-bold"></p>
+            <p id="skillMessage" class="text-warning fw-bold"></p>
             <div id="skillsList"></div>
         </section>
 
@@ -93,7 +105,7 @@
                 <button type="submit">Add Certification</button>
             </form>
 
-            <p id="certificationMessage" class="text-success fw-bold"></p>
+            <p id="certificationMessage" class="text-warning fw-bold"></p>
             <div id="certificationsList"></div>
         </section>
 
@@ -108,7 +120,7 @@
                 <button type="submit">Add Award</button>
             </form>
 
-            <p id="awardMessage" class="text-success fw-bold"></p>
+            <p id="awardMessage" class="text-warning fw-bold"></p>
             <div id="awardsList"></div>
         </section>
 
@@ -124,6 +136,35 @@
         </section>
     </main>
 
+    <div class="modal fade" id="librariesModal" tabindex="-1" aria-labelledby="librariesModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content text-dark">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="librariesModalLabel">Library Attribution</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p>This application was built using the following libraries and tools:</p>
+
+                    <ul>
+                        <li>Bootstrap — used for frontend styling and layout.</li>
+                        <li>Express — used for backend routing and RESTful services.</li>
+                        <li>SQLite / sqlite3 — used for local database storage.</li>
+                        <li>dotenv — used for environment variable support during development.</li>
+                        <li>nodemon — used during development to restart the server automatically.</li>
+                        <li>Google Gemini API — used to suggest improvements to resume bullet points.</li>
+                    </ul>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="app.js"></script>
 </body>
 </html>

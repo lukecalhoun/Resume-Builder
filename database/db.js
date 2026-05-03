@@ -67,4 +67,3 @@ db.serialize(() => {
         )
     `)
 })
-db.close()

@@ -71,31 +71,35 @@ btnEducation.addEventListener("click", () => {
 })
 
 btnPrintResume.addEventListener("click", () => {
-    const resumeContent = document.getElementById("resumePreview").innerHTML
+    const resumeContent = document.getElementById("resumePreview").outerHTML
 
-    const printWindow = window.open("", "", "width=800,height=1000")
+    const printWindow = window.open("", "", "width=900,height=1000")
 
     printWindow.document.write(`
         <!DOCTYPE html>
         <html>
         <head>
             <title>Resume</title>
-            <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+            <link id="bootstrapStyles" rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
         </head>
-        <body>
-            <main class="container-fluid my-4 px-5">
+        <body class="bg-light">
+            <main class="container-fluid my-4 px-6">
                 ${resumeContent}
             </main>
+
+            <script>
+                const bootstrapLink = document.getElementById("bootstrapStyles")
+
+                bootstrapLink.onload = () => {
+                    window.focus()
+                    window.print()
+                }
+            <\/script>
         </body>
         </html>
     `)
 
     printWindow.document.close()
-    printWindow.focus()
-
-    setTimeout(() => {
-        printWindow.print()
-    }, 500)
 })
 
 const profileForm = document.getElementById("profileForm")

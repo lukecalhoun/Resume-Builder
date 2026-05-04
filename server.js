@@ -479,6 +479,66 @@ app.post("/suggest-detail", async (req, res) => {
     })
 })
 
+app.post("/education", (req, res) => {
+    const {txtSchoolName, txtDegree, txtGraduationDate, txtSchoolLocation} = req.body
+
+    const strQuery = `
+        INSERT INTO education
+        (txtSchoolName, txtDegree, txtGraduationDate, txtSchoolLocation)
+        VALUES (?, ?, ?, ?)
+    `
+
+    db.run(strQuery, [txtSchoolName, txtDegree, txtGraduationDate, txtSchoolLocation], function(err){
+        if(err){
+            return res.status(400).json({
+                message: "Unable to add education due to " + err.message
+            })
+        }
+
+        res.status(201).json({
+            message: "Education added successfully",
+            educationID: this.lastID
+        })
+    })
+})
+
+app.get("/education", (req, res) => {
+    const strQuery = `
+        SELECT * FROM education
+    `
+
+    db.all(strQuery, [], (err, rows) => {
+        if(err){
+            return res.status(400).json({
+                message: "Unable to retrieve education"
+            })
+        }
+
+        res.json(rows)
+    })
+})
+
+app.delete("/education/:educationID", (req, res) => {
+    const educationID = req.params.educationID
+
+    const strQuery = `
+        DELETE FROM education
+        WHERE educationID = ?
+    `
+
+    db.run(strQuery, [educationID], function(err){
+        if(err){
+            return res.status(400).json({
+                message: "Unable to delete education due to " + err.message
+            })
+        }
+
+        res.json({
+            message: "Education deleted successfully"
+        })
+    })
+})
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })

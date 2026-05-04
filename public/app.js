@@ -1,9 +1,10 @@
 const homeSection = document.getElementById("homeSection")
 const jobsSection = document.getElementById("jobsSection")
 const skillsSection = document.getElementById("skillsSection")
-const resumeSection = document.getElementById("resumeSection")
 const certificationsSection = document.getElementById("certificationsSection")
 const awardsSection = document.getElementById("awardsSection")
+const educationSection = document.getElementById("educationSection")
+const resumeSection = document.getElementById("resumeSection")
 
 
 const btnHome = document.getElementById("btnHome")
@@ -12,15 +13,17 @@ const btnSkills = document.getElementById("btnSkills")
 const btnResume = document.getElementById("btnResume")
 const btnCertifications = document.getElementById("btnCertifications")
 const btnAwards = document.getElementById("btnAwards")
+const btnEducation = document.getElementById("btnEducation")
 const btnPrintResume = document.getElementById("btnPrintResume")
 
 function hideAllSections (){
     homeSection.classList.add("d-none")
     jobsSection.classList.add("d-none")
     skillsSection.classList.add("d-none")
-    resumeSection.classList.add("d-none")
     certificationsSection.classList.add("d-none")
     awardsSection.classList.add("d-none")
+    educationSection.classList.add("d-none")
+    resumeSection.classList.add("d-none")
 }
 
 btnHome.addEventListener("click", () => {
@@ -58,6 +61,12 @@ btnAwards.addEventListener("click", () => {
     loadAwards()
 })
 
+btnEducation.addEventListener("click", () => {
+    hideAllSections()
+    educationSection.classList.remove("d-none")
+    loadEducation()
+})
+
 btnPrintResume.addEventListener("click", () => {
     const resumeContent = document.getElementById("resumePreview").innerHTML
 
@@ -84,6 +93,33 @@ btnPrintResume.addEventListener("click", () => {
     setTimeout(() => {
         printWindow.print()
     }, 500)
+})
+
+const profileForm = document.getElementById("profileForm")
+const profileMessage = document.getElementById("profileMessage")
+
+profileForm.addEventListener("submit", async (event) => {
+    event.preventDefault()
+
+    const objProfile = {
+        txtFullName: document.getElementById("txtFullName").value,
+        txtEmail: document.getElementById("txtEmail").value,
+        txtPhone: document.getElementById("txtPhone").value,
+        txtLinkedIn: document.getElementById("txtLinkedIn").value,
+        txtGitHub: document.getElementById("txtGitHub").value
+    }
+
+    const response = await fetch("/profile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(objProfile)
+    })
+
+    const data = await response.json()
+
+    profileMessage.textContent = data.message
 })
 
 const jobForm = document.getElementById("jobForm")
@@ -194,31 +230,32 @@ awardForm.addEventListener("submit", async (event) => {
     loadAwards()
 })
 
-const profileForm = document.getElementById("profileForm")
-const profileMessage = document.getElementById("profileMessage")
+const educationForm = document.getElementById("educationForm")
+const educationMessage = document.getElementById("educationMessage")
+const educationList = document.getElementById("educationList")
 
-profileForm.addEventListener("submit", async (event) => {
+educationForm.addEventListener("submit", async (event) => {
     event.preventDefault()
 
-    const objProfile = {
-        txtFullName: document.getElementById("txtFullName").value,
-        txtEmail: document.getElementById("txtEmail").value,
-        txtPhone: document.getElementById("txtPhone").value,
-        txtLinkedIn: document.getElementById("txtLinkedIn").value,
-        txtGitHub: document.getElementById("txtGitHub").value
+    const objEducation = {
+        txtSchoolName: document.getElementById("txtSchoolName").value,
+        txtDegree: document.getElementById("txtDegree").value,
+        txtGraduationDate: document.getElementById("txtGraduationDate").value,
+        txtSchoolLocation: document.getElementById("txtSchoolLocation").value
     }
 
-    const response = await fetch("/profile", {
+    const response = await fetch("/education", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(objProfile)
+        body: JSON.stringify(objEducation)
     })
 
     const data = await response.json()
 
-    profileMessage.textContent = data.message
+    educationMessage.textContent = data.message
+    loadEducation()
 })
 
 const apiKeyForm = document.getElementById("apiKeyForm")
@@ -460,6 +497,50 @@ async function loadAwards(){
     })
 }
 
+async function loadEducation(){
+
+    const response = await fetch("/education")
+    const education = await response.json()
+
+    educationList.innerHTML = ""
+
+    education.forEach(item => {
+        educationList.innerHTML += `
+            <div class="card bg-dark text-light border-secondary p-3 mb-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h3>${item.txtSchoolName}</h3>
+
+                    <button class="btn btn-sm btn-danger deleteEducationButton" data-educationid="${item.educationID}" title="Delete education">
+                        &times;
+                    </button>
+                </div>
+
+                <p>${item.txtDegree}</p>
+                <p>${item.txtGraduationDate}</p>
+                <p>${item.txtSchoolLocation}</p>
+                <hr>
+            </div>
+        `
+    })
+
+    const deleteEducationButtons = document.querySelectorAll(".deleteEducationButton")
+
+    deleteEducationButtons.forEach(button => {
+        button.addEventListener("click", async () => {
+            const educationID = button.dataset.educationid
+
+            const response = await fetch(`/education/${educationID}`, {
+                method: "DELETE"
+            })
+
+            const data = await response.json()
+
+            educationMessage.textContent = data.message
+            loadEducation()
+        })
+    })
+}
+
 async function loadResumePreview(){
 
     const profileResponse = await fetch("/profile")
@@ -477,29 +558,38 @@ async function loadResumePreview(){
     const awardsResponse = await fetch("/awards")
     const awards = await awardsResponse.json()
 
+    const educationResponse = await fetch("/education")
+    const education = await educationResponse.json()
+
     const resumeOptions = document.getElementById("resumeOptions")
     const resumePreview = document.getElementById("resumePreview")
 
     resumeOptions.innerHTML = `
-        <h4>Jobs</h4>
-        <div id="jobOptions"></div>
+        <div class="card bg-dark border-secondary text-light p-3 mb-3">
+            <h4>Jobs</h4>
+            <div class="mb-3" id="jobOptions"></div>
 
-        <h4>Skills</h4>
-        <div id="skillOptions"></div>
+            <h4>Skills</h4>
+            <div class="mb-3" id="skillOptions"></div>
 
-        <h4>Certifications</h4>
-        <div id="certificationOptions"></div>
+            <h4>Certifications</h4>
+            <div class="mb-3" id="certificationOptions"></div>
 
-        <h4>Awards</h4>
-        <div id="awardOptions"></div>
+            <h4>Awards</h4>
+            <div class="mb-3" id="awardOptions"></div>
 
-        <button id="btnBuildResume">Build Resume Preview</button>
+            <h4>Education</h4>
+            <div class="mb-3" id="educationOptions"></div>
+
+            <button class="btn btn-primary mt-3 mb-3" id="btnBuildResume">Build Resume Preview</button>
+        </div>
     `
 
     const jobOptions = document.getElementById("jobOptions")
     const skillOptions = document.getElementById("skillOptions")
     const certificationOptions = document.getElementById("certificationOptions")
     const awardOptions = document.getElementById("awardOptions")
+    const educationOptions = document.getElementById("educationOptions")
 
     for(const job of jobs){
 
@@ -510,20 +600,22 @@ async function loadResumePreview(){
 
         details.forEach(detail => {
             detailOptionsHTML += `
-                <label style="margin-left: 25px;">
-                    <input type="checkbox" class="detailCheckbox" data-jobid="${job.jobID}" value="${detail.detailID}">
-                    ${detail.txtDetail}
-                </label>
-                <br>
+                <div class="form-check ms-4">
+                    <input class="form-check-input detailCheckbox" type="checkbox" data-jobid="${job.jobID}" value="${detail.detailID}" id="detail${detail.detailID}">
+                    <label class="form-check-label" for="detail${detail.detailID}">
+                        ${detail.txtDetail}
+                    </label>
+                </div>
             `
         })
 
         jobOptions.innerHTML += `
-            <label>
-                <input type="checkbox" class="jobCheckbox" value="${job.jobID}">
-                ${job.txtJobTitle} - ${job.txtCompany}
-            </label>
-            <br>
+            <div class="form-check">
+                <input class="form-check-input jobCheckbox" type="checkbox" value="${job.jobID}" id="job${job.jobID}">
+                <label class="form-check-label" for="job${job.jobID}">
+                    ${job.txtJobTitle} - ${job.txtCompany}
+                </label>
+            </div> 
             ${detailOptionsHTML}
         `
     }
@@ -558,6 +650,17 @@ async function loadResumePreview(){
         `
     })
 
+    education.forEach(item => {
+        educationOptions.innerHTML += `
+            <div class="form-check">
+                <input class="form-check-input educationCheckbox" type="checkbox" value="${item.educationID}" id="education${item.educationID}">
+                <label class="form-check-label" for="education${item.educationID}">
+                    ${item.txtSchoolName} - ${item.txtDegree}
+                </label>
+            </div>
+        `   
+    })
+
     async function buildResume(){
 
         const selectedJobIDs = Array.from(document.querySelectorAll(".jobCheckbox:checked")).map(checkbox => Number(checkbox.value))
@@ -565,7 +668,7 @@ async function loadResumePreview(){
         const selectedSkillIDs = Array.from(document.querySelectorAll(".skillCheckbox:checked")).map(checkbox => Number(checkbox.value))
         const selectedCertificationIDs = Array.from(document.querySelectorAll(".certificationCheckbox:checked")).map(checkbox => Number(checkbox.value))
         const selectedAwardIDs = Array.from(document.querySelectorAll(".awardCheckbox:checked")).map(checkbox => Number(checkbox.value))
-
+        const selectedEducationIDs = Array.from(document.querySelectorAll(".educationCheckbox:checked")).map(checkbox => Number(checkbox.value))
         let jobsHTML = ""
 
         for(const job of jobs){
@@ -584,9 +687,9 @@ async function loadResumePreview(){
                 })
 
                 jobsHTML += `
-                    <div>
-                        <h3>${job.txtJobTitle} - ${job.txtCompany}</h3>
-                        <p>${job.txtStartDate} - ${job.txtEndDate} | ${job.txtLocation}</p>
+                    <div class="mb-3">
+                        <p class="mb-1 fw-semibold fs-5">${job.txtJobTitle} - ${job.txtCompany}</p>
+                        <p class="mb-1">${job.txtStartDate} - ${job.txtEndDate} | ${job.txtLocation}</p>
                         <ul>
                             ${detailsHTML}
                         </ul>
@@ -623,33 +726,53 @@ async function loadResumePreview(){
             }
         })
 
+        let educationHTML = ""
+
+        education.forEach(item => {
+            if(selectedEducationIDs.includes(item.educationID)){
+                educationHTML += `
+                    <li>
+                        ${item.txtSchoolName}
+                        ${item.txtDegree ? " - " + item.txtDegree : ""}
+                        ${item.txtGraduationDate ? " " + item.txtGraduationDate : ""}
+                        ${item.txtSchoolLocation ? " | " + item.txtSchoolLocation : ""}
+                    </li>
+                `
+            }
+        })
+
         resumePreview.innerHTML = `
-            <div>
-                <h1>${profile.txtFullName || "Your Name"}</h1>
-                <p>
+            <div class="bg-white text-dark p-5 rounded shadow border border-dark">
+                <h1 class="text-center mb-1">${profile.txtFullName || "Your Name"}</h1>
+                <p class="text-center border-bottom pb-3 mb-4">
                     ${profile.txtEmail || ""}
                     ${profile.txtPhone ? " | " + profile.txtPhone : ""}
                     ${profile.txtLinkedIn ? " | " + profile.txtLinkedIn : ""}
                     ${profile.txtGitHub ? " | " + profile.txtGitHub : ""}
                 </p>
 
-                <h2>Experience</h2>
-                ${jobsHTML}
+                    <h2 class="border-bottom border-secondary pb-1 mt-4">Experience</h2>
+                    ${jobsHTML}
 
-                <h2>Skills</h2>
-                <ul>
-                    ${skillsHTML}
-                </ul>
+                    <h2 class="border-bottom border-secondary pb-1 mt-4">Skills</h2>
+                    <ul>
+                        ${skillsHTML}
+                    </ul>
 
-                <h2>Certifications</h2>
-                <ul>
-                    ${certificationsHTML}
-                </ul>
+                    <h2 class="border-bottom border-secondary pb-1 mt-4">Certifications</h2>
+                    <ul>
+                        ${certificationsHTML}
+                    </ul>
 
-                <h2>Awards</h2>
-                <ul>
-                    ${awardsHTML}
-                </ul>
+                    <h2 class="border-bottom border-secondary pb-1 mt-4">Awards</h2>
+                    <ul>
+                        ${awardsHTML}
+                    </ul>
+
+                    <h2 class="border-bottom border-secondary pb-1 mt-4">Education</h2>
+                    <ul>
+                        ${educationHTML}
+                    </ul>
             </div>
         `
     }
@@ -671,4 +794,5 @@ loadJobs()
 loadSkills()
 loadCertifications()
 loadAwards()
+loadEducation()
 loadAPISettings()

@@ -66,4 +66,14 @@ db.serialize(() => {
             txtGeminiAPIKey
         )
     `)
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS education (
+            educationID INTEGER PRIMARY KEY AUTOINCREMENT,
+            txtSchoolName TEXT NOT NULL,
+            txtDegree TEXT,
+            txtGraduationDate TEXT,
+            txtSchoolLocation TEXT
+        )
+    `)
 })

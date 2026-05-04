@@ -24,6 +24,7 @@
                     <button class="btn btn-primary" id="btnSkills">Skills</button>
                     <button class="btn btn-primary" id="btnCertifications">Certifications</button>
                     <button class="btn btn-primary" id="btnAwards">Awards</button>
+                    <button class="btn btn-primary" id="btnEducation">Education</button>
                     <button class="btn btn-primary" id="btnResume">Resume</button>
                     <button class="btn btn-outline-light" id="btnLibraries" data-bs-toggle="modal" data-bs-target="#librariesModal">
                         Libraries
@@ -35,104 +36,220 @@
 
     <main id="app" class="container pb-5">
 
-        <section id="homeSection" class="card bg-secondary text-light p-4 mb-4">
+        <section id="homeSection" class="card bg-dark border-secondary text-light p-4 mb-4 shadow">
             <h2>Profile</h2>
             <p>Enter the contact information that will appear at the top of your resume.</p>
 
-            <form id="profileForm">
-                <input type="text" id="txtFullName" placeholder="Full Name" required>
-                <input type="text" id="txtEmail" placeholder="Email" required>
-                <input type="text" id="txtPhone" placeholder="Phone" required>
-                <input type="text" id="txtLinkedIn" placeholder="LinkedIn" required>
-                <input type="text" id="txtGitHub" placeholder="GitHub">
+            <form id="profileForm" class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <label for="txtFullName" class="form-label">Full Name</label>
+                    <input class="form-control" type="text" id="txtFullName" placeholder="Full Name" required>
+                </div>
 
-                <button type="submit">Save Profile</button>
+                <div class="col-md-3">
+                    <label for="txtEmail" class="form-label">Email</label>
+                    <input class="form-control" type="text" id="txtEmail" placeholder="Email" required>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="txtPhone" class="form-label">Phone</label>
+                    <input class="form-control" type="text" id="txtPhone" placeholder="Phone" required>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="txtLinkedIn" class="form-label">LinkedIn</label>
+                    <input class="form-control" type="text" id="txtLinkedIn" placeholder="LinkedIn" required>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="txtGitHub" class="form-label">GitHub</label>
+                    <input class="form-control" type="text" id="txtGitHub" placeholder="GitHub">
+                </div>
+
+                <div class="col-12">
+                    <button class="btn btn-primary mt-2" type="submit">Save Profile</button>
+                </div>
             </form>
 
-            <p id="profileMessage" class="text-warning fw-bold"></p>
+            <p id="profileMessage" class="text-info fw-bold mt-2"></p>
             <hr>
 
             <h3>Gemini API Key</h3>
             <p>Enter your own Gemini API key for resume detail suggestions.</p>
 
-            <form id="apiKeyForm">
-                <input type="password" id="txtGeminiAPIKey" placeholder="Gemini API Key">
-                <button type="submit">Save API Key</button>
+            <form id="apiKeyForm" class="row g-2 align-items-end">
+                <div class="col-md-8">
+                    <label for="txtGeminiAPIKey" class="form-label">Gemini API Key</label>
+                    <input class="form-control" type="password" id="txtGeminiAPIKey" placeholder="Gemini API Key">
+                </div>
+
+                <div class="col-md-4">
+                    <button class="btn btn-primary" type="submit">Save API Key</button>
+                </div>
             </form>
 
-            <p id="apiKeyMessage" class="text-warning fw-bold"></p>
+            <p id="apiKeyMessage" class="text-info fw-bold mt-2"></p>
         </section>
 
-        <section id="jobsSection" class="card bg-secondary text-light p-4 mb-4 d-none">
+        <section id="jobsSection" class="card bg-dark border-secondary text-light p-4 mb-4 shadow d-none">
             <h2>Jobs</h2>
 
-            <form id="jobForm">
-                <input type="text" id="txtJobTitle" placeholder="Job Title" required>
-                <input type="text" id="txtCompany" placeholder="Company" required>
-                <input type="text" id="txtStartDate" placeholder="Start Date" required>
-                <input type="text" id="txtEndDate" placeholder="End Date" required>
-                <input type="text" id="txtLocation" placeholder="Location" required>
+            <form id="jobForm" class="card bg-dark border-secondary text-light p-4 mb-4 shadow d-none">
+                <div class="col-md-3">
+                    <label for="txtJobTitle" class="form-label">Job Title</label>
+                    <input class="form-control" type="text" id="txtJobTitle" placeholder="Job Title" required>
+                </div>
 
-                <button type="submit">Add Job</button>
+                <div class="col-md-3">
+                    <label for="txtCompany" class="form-label">Company</label>
+                    <input class="form-control" type="text" id="txtCompany" placeholder="Company" required>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="txtStartDate" class="form-label">Start Date</label>
+                    <input class="form-control" type="text" id="txtStartDate" placeholder="Start Date" required>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="txtEndDate" class="form-label">End Date</label>
+                    <input class="form-control" type="text" id="txtEndDate" placeholder="End Date" required>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="txtLocation" class="form-label">Location</label>
+                    <input class="form-control" type="text" id="txtLocation" placeholder="Location" required>
+                </div>
+
+                <div class="col-12">
+                    <button class="btn btn-primary mt-2" type="submit">Add Job</button>
+                </div>
             </form>
 
-            <p id="jobMessage" class="text-warning fw-bold"></p>
+            <p id="jobMessage" class="text-info fw-bold mt-2"></p>
             <div id="jobsList"></div>
         </section>
 
-        <section id="skillsSection" class="card bg-secondary text-light p-4 mb-4 d-none">
+        <section id="skillsSection" class="card bg-dark border-secondary text-light p-4 mb-4 shadow d-none">
             <h2>Skills</h2>
 
-            <form id="skillForm">
-                <input type="text" id="txtSkillName" placeholder="Skill Name" required>
-                <input type="text" id="txtSkillCategory" placeholder="Skill Category">
+            <form id="skillForm" class="row g-2 align-items-end mb-3">
+                <div class="col-md-5">
+                    <label for="txtSkillName" class="form-label">Skill Name</label>
+                    <input class="form-control" type="text" id="txtSkillName" placeholder="Skill Name" required>
+                </div>
 
-                <button type="submit">Add Skill</button>
+                <div class="col-md-5">
+                    <label for="txtSkillCategory" class="form-label">Skill Category</label>
+                    <input class="form-control" type="text" id="txtSkillCategory" placeholder="Skill Category">
+                </div>
+
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100" type="submit">Add Skill</button>
+                </div>
             </form>
 
-            <p id="skillMessage" class="text-warning fw-bold"></p>
+            <p id="skillMessage" class="text-info fw-bold mt-2"></p>
             <div id="skillsList"></div>
         </section>
 
-        <section id="certificationsSection" class="card bg-secondary text-light p-4 mb-4 d-none">
+        <section id="certificationsSection" class="card bg-dark border-secondary text-light p-4 mb-4 shadow d-none">
             <h2>Certifications</h2>
 
-            <form id="certificationForm">
-                <input type="text" id="txtCertificationName" placeholder="Certification Name" required>
-                <input type="text" id="txtOrganization" placeholder="Organization">
-                <input type="text" id="txtDateEarned" placeholder="Date Earned">
+            <form id="certificationForm" class="row g-2 align-items-end mb-3">
+                <div class="col-md-4">
+                    <label for="txtCertificationName" class="form-label">Certification Name</label>
+                    <input class="form-control" type="text" id="txtCertificationName" placeholder="Certification Name" required>
+                </div>
 
-                <button type="submit">Add Certification</button>
+                <div class="col-md-4">
+                    <label for="txtOrganization" class="form-label">Organization</label>
+                    <input class="form-control" type="text" id="txtOrganization" placeholder="Organization">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="txtDateEarned" class="form-label">Date Earned</label>
+                    <input class="form-control" type="text" id="txtDateEarned" placeholder="Date Earned">
+                </div>
+
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100" type="submit">Add Certification</button>
+                </div>
             </form>
 
-            <p id="certificationMessage" class="text-warning fw-bold"></p>
+            <p id="certificationMessage" class="text-info fw-bold mt-2"></p>
             <div id="certificationsList"></div>
         </section>
 
-        <section id="awardsSection" class="card bg-secondary text-light p-4 mb-4 d-none">
+        <section id="awardsSection" class="card bg-dark border-secondary text-light p-4 mb-4 shadow d-none">
             <h2>Awards</h2>
 
-            <form id="awardForm">
-                <input type="text" id="txtAwardName" placeholder="Award Name" required>
-                <input type="text" id="txtAwardOrganization" placeholder="Organization">
-                <input type="text" id="txtAwardDate" placeholder="Date">
+            <form id="awardForm" class="row g-2 align-items-end mb-3">
+                <div class="col-md-4">
+                    <label for="txtAwardName" class="form-label">Award Name</label>
+                    <input class="form-control" type="text" id="txtAwardName" placeholder="Award Name" required>
+                </div>
 
-                <button type="submit">Add Award</button>
+                <div class="col-md-4">
+                    <label for="txtAwardOrganization" class="form-label">Organization</label>
+                    <input class="form-control" type="text" id="txtAwardOrganization" placeholder="Organization">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="txtAwardDate" class="form-label">Date</label>
+                    <input class="form-control" type="text" id="txtAwardDate" placeholder="Date">
+                </div>
+
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100" type="submit">Add Award</button>
+                </div>
             </form>
 
-            <p id="awardMessage" class="text-warning fw-bold"></p>
+            <p id="awardMessage" class="text-info fw-bold mt-2"></p>
             <div id="awardsList"></div>
         </section>
 
-        <section id="resumeSection" class="card bg-secondary text-light p-4 mb-4 d-none">
+        <section id="educationSection" class="card bg-dark border-secondary text-light p-4 mb-4 shadow d-none">
+            <h2>Education</h2>
+
+            <form id="educationForm" class="row g-2 align-items-end mb-3">
+                <div class="col-md-3">
+                    <label for="txtSchoolName" class="form-label">School Name</label>
+                    <input class="form-control" type="text" id="txtSchoolName" placeholder="School Name" required>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="txtDegree" class="form-label">Degree / Program</label>
+                    <input class="form-control" type="text" id="txtDegree" placeholder="Degree or Program">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="txtGraduationDate" class="form-label">Graduation Date</label>
+                    <input class="form-control" type="text" id="txtGraduationDate" placeholder="Graduation Date">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="txtSchoolLocation" class="form-label">Location</label>
+                    <input class="form-control" type="text" id="txtSchoolLocation" placeholder="Location">
+                </div>
+
+                <div class="col-12">
+                    <button class="btn btn-primary mt-2" type="submit">Add Education</button>
+                </div>
+            </form>
+
+            <p id="educationMessage" class="text-info fw-bold mt-2"></p>
+            <div id="educationList"></div>
+        </section>
+
+        <section id="resumeSection" class="card bg-dark border-secondary text-light p-4 mb-4 shadow d-none">
             <h2>Resume Preview</h2>
 
             <h3>Select What to Include</h3>
             <div id="resumeOptions"></div>
             
             <h3>Preview</h3>
-            <button id="btnPrintResume">Print Resume</button>
-            <div id="resumePreview" class="bg-white text-dark p-4 rounded"></div>
+            <button class="btn btn-success mb-3" id="btnPrintResume">Print Resume</button>
+            <div id="resumePreview" class="bg-white text-dark p-4 rounded shadow"></div>
         </section>
     </main>
 

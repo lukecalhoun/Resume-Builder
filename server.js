@@ -515,6 +515,7 @@ app.post("/suggest-detail", async (req, res) => {
     })
 })
 
+// Education routes handle saving, loading, and deleting education entries for the resume.
 app.post("/education", (req, res) => {
     const {txtSchoolName, txtDegree, txtGraduationDate, txtSchoolLocation} = req.body
 

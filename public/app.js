@@ -83,7 +83,7 @@ btnPrintResume.addEventListener("click", () => {
             <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
         </head>
         <body>
-            <main class="container my-4">
+            <main class="container-fluid my-4 px-5">
                 ${resumeContent}
             </main>
         </body>
@@ -467,9 +467,7 @@ async function loadSkills(){
                 <div class="d-flex justify-content-between align-items-start">
                     <h3>${skill.txtSkillName}</h3>
 
-                    <button class="btn btn-sm btn-danger deleteSkillButton" data-skillid="${skill.skillID}" title="Delete skill">
-                        &times;
-                    </button>
+                    <button class="btn btn-sm btn-danger deleteSkillButton" data-skillid="${skill.skillID}" title="Delete skill">Delete Skill</button>
                 </div>
 
                 <p>${skill.txtSkillCategory}</p>
@@ -506,13 +504,35 @@ async function loadCertifications(){
 
     certifications.forEach(certification => {
         certificationsList.innerHTML += `
-            <div>
-                <h3>${certification.txtCertificationName}</h3>
+            <div class="card bg-dark text-light border-secondary p-3 mb-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h3>${certification.txtCertificationName}</h3>
+
+                    <button class="btn btn-sm btn-danger deleteCertificationButton" data-certificationid="${certification.certificationID}" title="Delete certification">Delete Certification</button>
+                </div>
+
                 <p>${certification.txtOrganization}</p>
                 <p>${certification.txtDateEarned}</p>
                 <hr>
             </div>
         `
+    })
+
+    const deleteCertificationButtons = document.querySelectorAll(".deleteCertificationButton")
+
+    deleteCertificationButtons.forEach(button => {
+        button.addEventListener("click", async () => {
+            const certificationID = button.dataset.certificationid
+
+            const response = await fetch(`/certifications/${certificationID}`, {
+                method: "DELETE"
+            })
+
+            const data = await response.json()
+
+            certificationMessage.textContent = data.message
+            loadCertifications()
+        })
     })
 }
 
@@ -526,13 +546,35 @@ async function loadAwards(){
 
     awards.forEach(award => {
         awardsList.innerHTML += `
-            <div>
-                <h3>${award.txtAwardName}</h3>
+            <div class="card bg-dark text-light border-secondary p-3 mb-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h3>${award.txtAwardName}</h3>
+
+                    <button class="btn btn-sm btn-danger deleteAwardButton" data-awardid="${award.awardID}" title="Delete award">Delete Award</button>
+                </div>
+
                 <p>${award.txtAwardOrganization}</p>
                 <p>${award.txtAwardDate}</p>
                 <hr>
             </div>
         `
+    })
+
+    const deleteAwardButtons = document.querySelectorAll(".deleteAwardButton")
+
+    deleteAwardButtons.forEach(button => {
+        button.addEventListener("click", async () => {
+            const awardID = button.dataset.awardid
+
+            const response = await fetch(`/awards/${awardID}`, {
+                method: "DELETE"
+            })
+
+            const data = await response.json()
+
+            awardMessage.textContent = data.message
+            loadAwards()
+        })
     })
 }
 
@@ -550,9 +592,7 @@ async function loadEducation(){
                 <div class="d-flex justify-content-between align-items-start">
                     <h3>${item.txtSchoolName}</h3>
 
-                    <button class="btn btn-sm btn-danger deleteEducationButton" data-educationid="${item.educationID}" title="Delete education">
-                        &times;
-                    </button>
+                    <button class="btn btn-sm btn-danger deleteEducationButton" data-educationid="${item.educationID}" title="Delete education">Delete Education</button>
                 </div>
 
                 <p>${item.txtDegree}</p>

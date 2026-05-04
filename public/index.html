@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Page metadata, Bootstrap stylesheet, and favicon/logo. -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ResuMate</title>
@@ -9,7 +10,7 @@
     <link rel="icon" type="image/svg+xml" href="images/logo.svg">
 </head>
 <body class="bg-dark text-light">
-    
+    <!-- Header contains the ResuMate branding and navigation buttons. -->
     <header class="container py-4 text-center">
         <h1 class="d-flex justify-content-center align-items-center gap-2 mb-3">
             <img src="images/logo.svg" alt="ResuMate logo" width="40" height="40">
@@ -33,9 +34,10 @@
             </div>
         </nav>
     </header>
-
+    <!-- Main application area. Each section is shown or hidden by app.js. -->
     <main id="app" class="container pb-5">
 
+        <!-- Profile section for contact information and Gemini API key. -->
         <section id="homeSection" class="card bg-dark border-secondary text-light p-4 mb-4 shadow">
             <h2>Profile</h2>
             <p>Enter the contact information that will appear at the top of your resume.</p>
@@ -91,6 +93,7 @@
             <p id="apiKeyMessage" class="text-info fw-bold mt-2"></p>
         </section>
 
+        <!-- Jobs section for work experience and responsibility bullet points. -->
         <section id="jobsSection" class="card bg-dark border-secondary text-light p-4 mb-4 shadow d-none">
             <h2>Jobs</h2>
 
@@ -129,6 +132,7 @@
             <div id="jobsList"></div>
         </section>
 
+        <!-- Skills section. -->
         <section id="skillsSection" class="card bg-dark border-secondary text-light p-4 mb-4 shadow d-none">
             <h2>Skills</h2>
 
@@ -152,6 +156,7 @@
             <div id="skillsList"></div>
         </section>
 
+        <!-- Certifications section. -->
         <section id="certificationsSection" class="card bg-dark border-secondary text-light p-4 mb-4 shadow d-none">
             <h2>Certifications</h2>
 
@@ -180,6 +185,7 @@
             <div id="certificationsList"></div>
         </section>
 
+        <!-- Awards section. -->
         <section id="awardsSection" class="card bg-dark border-secondary text-light p-4 mb-4 shadow d-none">
             <h2>Awards</h2>
 
@@ -208,6 +214,7 @@
             <div id="awardsList"></div>
         </section>
 
+        <!-- Education section. -->
         <section id="educationSection" class="card bg-dark border-secondary text-light p-4 mb-4 shadow d-none">
             <h2>Education</h2>
 
@@ -241,6 +248,7 @@
             <div id="educationList"></div>
         </section>
 
+        <!-- Resume section where users choose items and preview/print the resume. -->
         <section id="resumeSection" class="card bg-dark border-secondary text-light p-4 mb-4 shadow d-none">
             <h2>Resume Preview</h2>
 
@@ -253,6 +261,7 @@
         </section>
     </main>
 
+    <!-- Library attribution modal required for external libraries used in the project. -->
     <div class="modal fade" id="librariesModal" tabindex="-1" aria-labelledby="librariesModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content text-dark">
@@ -281,6 +290,7 @@
         </div>
     </div>
 
+    <!-- Bootstrap JavaScript bundle is loaded locally. app.js controls the SPA behavior. -->
     <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="app.js"></script>
 </body>

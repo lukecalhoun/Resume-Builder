@@ -1,13 +1,19 @@
+// Import Express for creating the web server and import the SQLite database connection.
 import express from "express"
 import { db } from "./database/db.js"
 
+// Create the Express app and choose the local development port.
 const app = express()
 const PORT = 8000
 
+// Allow Express to read JSON data sent from the frontend.
 app.use(express.json())
+
+// Serve files from the public folder, such as index.html, app.js, images, and frontend assets.
 app.use(express.static("public"))
 app.use("/bootstrap", express.static("node_modules/bootstrap/dist"))
 
+// Job routes handle creating, reading, and deleting job experience entries.
 app.post("/jobs", (req, res) => {
     const {txtJobTitle, txtCompany, txtStartDate, txtEndDate, txtLocation} = req.body
 
@@ -47,29 +53,6 @@ app.get("/jobs", (req, res) => {
     })
 })
 
-app.post("/job-details", (req, res) => {
-    const {jobID, txtDetail} = req.body
-
-    const strQuery = `
-        INSERT INTO job_details
-        (jobID, txtDetail)
-        VALUES (?, ?)
-    `
-
-    db.run(strQuery, [jobID, txtDetail], function(err){
-        if(err){
-            return res.status(400).json({
-                message: "Unable to add job detail due to " + err.message
-            })
-        }
-
-        res.status(201).json({
-            message: "Job detail added successfully",
-            detailID: this.lastID
-        })
-    })
-})
-
 app.delete("/jobs/:jobID", (req, res) => {
     const jobID = req.params.jobID
 
@@ -104,6 +87,30 @@ app.delete("/jobs/:jobID", (req, res) => {
     })
 })
 
+// Job detail routes handle resume responsibility bullet points connected to a specific job.
+app.post("/job-details", (req, res) => {
+    const {jobID, txtDetail} = req.body
+
+    const strQuery = `
+        INSERT INTO job_details
+        (jobID, txtDetail)
+        VALUES (?, ?)
+    `
+
+    db.run(strQuery, [jobID, txtDetail], function(err){
+        if(err){
+            return res.status(400).json({
+                message: "Unable to add job detail due to " + err.message
+            })
+        }
+
+        res.status(201).json({
+            message: "Job detail added successfully",
+            detailID: this.lastID
+        })
+    })
+})
+
 app.get("/job-details/:jobID", (req, res) => {
     const jobID = req.params.jobID
 
@@ -120,30 +127,6 @@ app.get("/job-details/:jobID", (req, res) => {
         }
 
         res.json(rows)
-    })
-})
-
-
-app.post("/skills", (req, res) => {
-    const {txtSkillName, txtSkillCategory} = req.body
-
-    const strQuery = `
-        INSERT INTO skills
-        (txtSkillName, txtSkillCategory)
-        VALUES (?,?)
-    `
-
-    db.run(strQuery, [txtSkillName, txtSkillCategory], function(err){
-        if(err){
-            return res.status(400).json({
-                message: "Unable to add skill due to " + err.message
-            })
-        }
-
-        res.status(201).json({
-            message: "Skill added successfully!",
-            skillID: this.lastID
-        })
     })
 })
 
@@ -168,6 +151,30 @@ app.delete("/job-details/:detailID", (req, res) => {
     })
 })
 
+// Skill routes handle saving and loading user skills or skill categories.
+app.post("/skills", (req, res) => {
+    const {txtSkillName, txtSkillCategory} = req.body
+
+    const strQuery = `
+        INSERT INTO skills
+        (txtSkillName, txtSkillCategory)
+        VALUES (?,?)
+    `
+
+    db.run(strQuery, [txtSkillName, txtSkillCategory], function(err){
+        if(err){
+            return res.status(400).json({
+                message: "Unable to add skill due to " + err.message
+            })
+        }
+
+        res.status(201).json({
+            message: "Skill added successfully!",
+            skillID: this.lastID
+        })
+    })
+})
+
 app.get("/skills", (req, res) => {
     const strQuery = `
         SELECT * FROM skills
@@ -184,6 +191,28 @@ app.get("/skills", (req, res) => {
     })
 })
 
+app.delete("/skills/:skillID", (req, res) => {
+    const skillID = req.params.skillID
+
+    const strQuery = `
+        DELETE FROM skills
+        WHERE skillID = ?
+    `
+
+    db.run(strQuery, [skillID], function(err){
+        if(err){
+            return res.status(400).json({
+                message: "Unable to delete skill due to " + err.message
+            })
+        }
+
+        res.json({
+            message: "Skill deleted successfully"
+        })
+    })
+})
+
+// Certification routes handle saving, loading, and deleting user certifications.
 app.post("/certifications", (req, res) => {
     const {txtCertificationName, txtOrganization, txtDateEarned} = req.body
 
@@ -244,6 +273,7 @@ app.delete("/certifications/:certificationID", (req, res) => {
     })
 })
 
+// Award routes handle saving, loading, and deleting user awards.
 app.post("/awards", (req, res) => {
     const {txtAwardName, txtAwardOrganization, txtAwardDate} = req.body
 
@@ -304,6 +334,8 @@ app.delete("/awards/:awardID", (req, res) => {
     })
 })
 
+// Profile routes store one set of contact information for the resume header.
+// The old profile is deleted before inserting the updated profile so only one profile is stored.
 app.post("/profile", (req, res) => {
     const {txtFullName, txtEmail, txtPhone, txtLinkedIn, txtGitHub} = req.body
 
@@ -356,6 +388,8 @@ app.get("/profile", (req, res) => {
     })
 })
 
+// API settings routes store the user's Gemini API key locally.
+// The key is not included in the submitted project and is saved only in the local SQLite database.
 app.post("/api-settings", (req, res) => {
     const {txtGeminiAPIKey} = req.body
 
@@ -407,6 +441,8 @@ app.get("/api-settings", (req, res) => {
     })
 })
 
+// This route sends a rough resume bullet point to Gemini and returns an improved version.
+// The user can review the suggestion before saving it as a job detail.
 app.post("/suggest-detail", async (req, res) => {
     const {txtDetail} = req.body
 
@@ -539,6 +575,7 @@ app.delete("/education/:educationID", (req, res) => {
     })
 })
 
+// Start the Express server.
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })

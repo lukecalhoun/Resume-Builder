@@ -1,3 +1,4 @@
+// Get references to each main section of the single-page application.
 const homeSection = document.getElementById("homeSection")
 const jobsSection = document.getElementById("jobsSection")
 const skillsSection = document.getElementById("skillsSection")
@@ -6,7 +7,7 @@ const awardsSection = document.getElementById("awardsSection")
 const educationSection = document.getElementById("educationSection")
 const resumeSection = document.getElementById("resumeSection")
 
-
+// Get references to the navigation buttons.
 const btnHome = document.getElementById("btnHome")
 const btnJobs = document.getElementById("btnJobs")
 const btnSkills = document.getElementById("btnSkills")
@@ -16,6 +17,7 @@ const btnAwards = document.getElementById("btnAwards")
 const btnEducation = document.getElementById("btnEducation")
 const btnPrintResume = document.getElementById("btnPrintResume")
 
+// Hide all sections before showing the section selected by the user.
 function hideAllSections (){
     homeSection.classList.add("d-none")
     jobsSection.classList.add("d-none")
@@ -26,6 +28,7 @@ function hideAllSections (){
     resumeSection.classList.add("d-none")
 }
 
+// Navigation button event listeners show one section at a time.
 btnHome.addEventListener("click", () => {
     hideAllSections()
     homeSection.classList.remove("d-none")
@@ -98,6 +101,7 @@ btnPrintResume.addEventListener("click", () => {
 const profileForm = document.getElementById("profileForm")
 const profileMessage = document.getElementById("profileMessage")
 
+// Save the user's profile/contact information.
 profileForm.addEventListener("submit", async (event) => {
     event.preventDefault()
 
@@ -125,6 +129,7 @@ profileForm.addEventListener("submit", async (event) => {
 const jobForm = document.getElementById("jobForm")
 const jobMessage = document.getElementById("jobMessage")
 
+// Save a new job entry and reload the job list.
 jobForm.addEventListener("submit", async (event) => {
     event.preventDefault()
 
@@ -154,6 +159,7 @@ const skillForm = document.getElementById("skillForm")
 const skillMessage = document.getElementById("skillMessage")
 const skillsList = document.getElementById("skillsList")
 
+// Save a new skill and reload the skill list.
 skillForm.addEventListener("submit", async (event) => {
     event.preventDefault()
 
@@ -180,6 +186,7 @@ const certificationForm = document.getElementById("certificationForm")
 const certificationMessage = document.getElementById("certificationMessage")
 const certificationsList = document.getElementById("certificationsList")
 
+// Save a new certification and reload the certification list.
 certificationForm.addEventListener("submit", async (event) => {
     event.preventDefault()
 
@@ -207,6 +214,7 @@ const awardForm = document.getElementById("awardForm")
 const awardMessage = document.getElementById("awardMessage")
 const awardsList = document.getElementById("awardsList")
 
+// Save a new award and reload the award list.
 awardForm.addEventListener("submit", async (event) => {
     event.preventDefault()
 
@@ -234,6 +242,7 @@ const educationForm = document.getElementById("educationForm")
 const educationMessage = document.getElementById("educationMessage")
 const educationList = document.getElementById("educationList")
 
+// Save a new education entry and reload the education list.
 educationForm.addEventListener("submit", async (event) => {
     event.preventDefault()
 
@@ -261,6 +270,7 @@ educationForm.addEventListener("submit", async (event) => {
 const apiKeyForm = document.getElementById("apiKeyForm")
 const apiKeyMessage = document.getElementById("apiKeyMessage")
 
+// Save the user's Gemini API key locally.
 apiKeyForm.addEventListener("submit", async (event) => {
     event.preventDefault()
 
@@ -283,6 +293,7 @@ apiKeyForm.addEventListener("submit", async (event) => {
 
 const jobsList = document.getElementById("jobsList")
 
+// Load the saved profile information into the profile form.
 async function loadProfile(){
 
     const response = await fetch("/profile")
@@ -295,6 +306,7 @@ async function loadProfile(){
     document.getElementById("txtGitHub").value = profile.txtGitHub || ""
 }
 
+// Load all jobs and their details, then add event listeners for details, suggestions, and deletes.
 async function loadJobs(){
     
     const response = await fetch("/jobs")
@@ -441,6 +453,7 @@ deleteDetailButtons.forEach(button => {
 })
 }
 
+// Load all saved skills and display them in the Skills section.
 async function loadSkills(){
     
     const response = await fetch ("/skills")
@@ -450,15 +463,40 @@ async function loadSkills(){
 
     skills.forEach(skill => {
         skillsList.innerHTML += `
-            <div>
-                <h3>${skill.txtSkillName}</h3>
+            <div class="card bg-dark text-light border-secondary p-3 mb-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h3>${skill.txtSkillName}</h3>
+
+                    <button class="btn btn-sm btn-danger deleteSkillButton" data-skillid="${skill.skillID}" title="Delete skill">
+                        &times;
+                    </button>
+                </div>
+
                 <p>${skill.txtSkillCategory}</p>
                 <hr>
             </div>
         `
     })
+
+    const deleteSkillButtons = document.querySelectorAll(".deleteSkillButton")
+
+    deleteSkillButtons.forEach(button => {
+        button.addEventListener("click", async () => {
+            const skillID = button.dataset.skillid
+
+            const response = await fetch(`/skills/${skillID}`, {
+                method: "DELETE"
+            })
+
+            const data = await response.json()
+
+            skillMessage.textContent = data.message
+            loadSkills()
+        })
+    })
 }
 
+// Load all saved certifications and display them in the Certifications section.
 async function loadCertifications(){
 
     const response = await fetch("/certifications")
@@ -478,6 +516,7 @@ async function loadCertifications(){
     })
 }
 
+// Load all saved awards and display them in the Awards section.
 async function loadAwards(){
 
     const response = await fetch("/awards")
@@ -497,6 +536,7 @@ async function loadAwards(){
     })
 }
 
+// Load all saved education entries and display them in the Education section.
 async function loadEducation(){
 
     const response = await fetch("/education")
@@ -541,6 +581,8 @@ async function loadEducation(){
     })
 }
 
+// Build the resume selection controls and preview using data from the database.
+// The user selects which items should appear before building the final preview.
 async function loadResumePreview(){
 
     const profileResponse = await fetch("/profile")
@@ -782,6 +824,7 @@ async function loadResumePreview(){
     buildResume()
 }
 
+// Load the saved Gemini API key into the API key input field.
 async function loadAPISettings(){
 
     const response = await fetch("/api-settings")
@@ -789,6 +832,8 @@ async function loadAPISettings(){
 
     document.getElementById("txtGeminiAPIKey").value = settings.txtGeminiAPIKey || ""
 }
+
+// Load saved data when the page first opens.
 loadProfile()
 loadJobs()
 loadSkills()
